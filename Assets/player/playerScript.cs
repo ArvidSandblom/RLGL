@@ -11,6 +11,7 @@ public class playerScript : MonoBehaviour
     public Rigidbody2D Rigidbody2D;
     private float healthTimer = 0.0f;
     private bool stopMove;
+    private GameObject manager;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -18,7 +19,7 @@ public class playerScript : MonoBehaviour
     {
 
         enemy = GameObject.FindGameObjectWithTag("Enemy");
-
+        manager = GameObject.FindGameObjectWithTag("Manager");
 
     }
 
@@ -55,6 +56,13 @@ public class playerScript : MonoBehaviour
         if (stopMove && Rigidbody2D.linearVelocity.magnitude < 0.5f)
         {
             Rigidbody2D.linearVelocity = Vector2.zero;
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision) //Fungerar ej, ändra till collision och inte trigger?
+    {
+        if (collision.name == "Goal Collider")
+        {
+            manager.GetComponent<managerScript>().finish = true;
         }
     }
 }

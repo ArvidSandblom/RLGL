@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class enemyScript : MonoBehaviour
 {
+    //Kan använda ljus för för att visa FoV kon som inte går igenom väggar
     [Range(1, 360)]public float fov = 45;    
     private GameObject player;
     public bool hasLoS = false;
@@ -26,8 +27,17 @@ public class enemyScript : MonoBehaviour
 
         FoV();
         DrawFOVLines();
+        if (hasLoS)
+        {
+            player.GetComponent<playerScript>().isSeen = true;
+        }
+        else if (!hasLoS)
+        {
+            player.GetComponent<playerScript>().isSeen = false;
+        }
 
-       
+        
+
     }
     private void DrawFOVLines()
 {
