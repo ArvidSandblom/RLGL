@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class enemyScript : MonoBehaviour
 {
-    //Kan använda ljus för för att visa FoV kon som inte går igenom väggar
+    //Kan anvï¿½nda ljus fï¿½r fï¿½r att visa FoV kon som inte gï¿½r igenom vï¿½ggar
     [Range(1, 360)]public float fov = 45;    
+    public float range = 20f;
     private GameObject player;
     public bool hasLoS = false;
     public LayerMask obstacleMask;
@@ -41,7 +42,7 @@ public class enemyScript : MonoBehaviour
     }
     private void DrawFOVLines()
 {
-    float range = 4f;                         
+                             
     float halfFov = fov / 2f;
     
     Vector3 forward = transform.up;
@@ -56,11 +57,15 @@ public class enemyScript : MonoBehaviour
 
     IEnumerator RotateSequence()
     {
+        int timesRotated = 1;
+
         while (true) 
         {
             
             turnTime = Random.Range(3f,5f);
             turnTimer = Random.Range(1.5f,2.5f);
+            turnTime = turnTime / timesRotated * 1.1f;
+            turnTimer = turnTimer / timesRotated * 1.1f;
             
             yield return StartCoroutine(RotateOverTime(targetRotation, turnTime));
 
@@ -72,6 +77,8 @@ public class enemyScript : MonoBehaviour
 
             
             yield return new WaitForSeconds(turnTimer);
+            timesRotated++;
+            
         }
     }
     IEnumerator RotateOverTime(Quaternion target, float duration)
@@ -97,7 +104,7 @@ public class enemyScript : MonoBehaviour
     }
     private void FoV()
     {
-        Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, 4, playerMask);
+        Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, range, playerMask);
 
         if (rangeChecks.Length > 0)
         {

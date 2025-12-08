@@ -7,18 +7,20 @@ public class playerScript : MonoBehaviour
     public bool isSeen = false;
     private float speed = 1.0f;
     public int health = 3;
-    GameObject enemy;
+    GameObject[] enemy;
     public Rigidbody2D Rigidbody2D;
     private float healthTimer = 0.0f;
     private bool stopMove;
     private GameObject manager;
+    private GameObject enemyScriptID;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
-        enemy = GameObject.FindGameObjectWithTag("Enemy");
+        enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        enemyScriptID = GameObject.FindGameObjectWithTag("Enemy");
         manager = GameObject.FindGameObjectWithTag("Manager");
 
     }
@@ -28,7 +30,7 @@ public class playerScript : MonoBehaviour
     {
         stopMove = !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D);
         healthTimer -= Time.deltaTime;
-        if (enemy.GetComponent<enemyScript>().hasLoS && healthTimer <= 0 && Rigidbody2D.linearVelocity.magnitude > 0.25f)
+        if (enemyScriptID.GetComponent<enemyScript>().hasLoS && healthTimer <= 0 && Rigidbody2D.linearVelocity.magnitude > 0.25f)
         {
             health -= 1;
             healthTimer = 2.0f;
@@ -58,11 +60,15 @@ public class playerScript : MonoBehaviour
             Rigidbody2D.linearVelocity = Vector2.zero;
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision) //Fungerar ej, ändra till collision och inte trigger?
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.name == "Goal Collider")
+        if (collision.gameObject.name == "Goal Collider")
         {
             manager.GetComponent<managerScript>().finish = true;
+        }
+        foreach (GameObject enemy in enemy)
+        {
+            enemy.SetActive(false);            
         }
     }
 }
