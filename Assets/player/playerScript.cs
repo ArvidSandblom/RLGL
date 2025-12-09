@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class playerScript : MonoBehaviour
 {
     public bool isSeen = false;
+    public Color playerColor;
     private float speed = 1.0f;
     public int health = 3;
     GameObject[] enemy;
